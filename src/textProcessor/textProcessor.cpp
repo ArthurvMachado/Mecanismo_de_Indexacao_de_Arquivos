@@ -6,8 +6,9 @@
 #include <fstream>
 #include <sstream>
 #include <cctype>
+#include <algorithm>
 
-TextProcessor::TextProcessor() { stopWords.clear(); }
+TextProcessor::TextProcessor(){ stopWords.clear(); }
 TextProcessor::~TextProcessor() {}
 
 bool TextProcessor::loadStopWords(const std::string& datapath){
@@ -18,7 +19,7 @@ bool TextProcessor::loadStopWords(const std::string& datapath){
     std::string str;
     while(words >> str) stopWords.insert(str); // Adiciona no set de Stop Words
 
-    words.close();
+    words.close(); // Fecha o arquivo
     return true;
 }
 
@@ -30,7 +31,7 @@ bool TextProcessor::loadText(const std::string& datapath){
     std::stringstream buffer; // Buffer com o texto original
     buffer << text_a.rdbuf(); // Lê todo o arquivo para o buffer
 
-    text = buffer.str();
+    text = buffer.str(); // Copia o buffer para text
     return true;
 }
 
@@ -42,15 +43,16 @@ std::vector<std::string> TextProcessor::breakWords(const std::string& text){
     std::string str;
     while(buffer >> str){
         lowerCase(str);
+        removePunctuation(str);
         words.push_back(str);
     }
 
     return words;
 }
 
-void TextProcessor::lowerCase(std::string& text){
-    for(char c : text) text[c] = std::tolower(text[c]);
-}
+void TextProcessor::lowerCase(std::string& text){ for(char c : text) if(std::islower(c)) c = std::tolower(c); }
+
+void TextProcessor::removePunctuation(std::string& text){ for(int i = 0; i < text.size(); i++) if(std::ispunct(text[i])) text.erase(i, 1); }
 
 std::vector<std::string> TextProcessor::processar(std::string texto){
     std::vector<std::string> placeholder;
