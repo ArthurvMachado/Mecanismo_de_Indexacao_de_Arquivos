@@ -11,8 +11,12 @@ class TextProcessor{
 
         bool loadStopWords(const std::string& datapath); // Carrega as Stop Words
         bool loadText(const std::string& datapath); // Carrega o texto de exemplo
-        void lowerCase(std::string& word); // Converte para minúsculo
-        void removePunctuation(std::string& word); // Remove pontuação
+
+        void normalize(std::string& text); // Normaliza o texto
+        void lowerCase(std::string& text); // Converte para minúsculo
+        void removePunctuation(std::string& text); // Remove pontuação
+
+        bool isStopWord(std::string& word); // Remove Stop Words
 
         std::vector<std::string> breakWords(const std::string& text); // Separa todas as palavras so texto
 

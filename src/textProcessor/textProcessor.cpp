@@ -42,17 +42,19 @@ std::vector<std::string> TextProcessor::breakWords(const std::string& text){
     
     std::string str;
     while(buffer >> str){
-        lowerCase(str);
-        removePunctuation(str);
-        words.push_back(str);
+        normalize(str);
+        if(!isStopWord) words.push_back(str);
     }
 
     return words;
 }
 
-void TextProcessor::lowerCase(std::string& text){ for(char c : text) if(std::islower(c)) c = std::tolower(c); }
+void TextProcessor::normalize(std::string& text){ lowerCase(text); removePunctuation(text); }
 
+void TextProcessor::lowerCase(std::string& text){ for(char c : text) if(std::islower(c)) c = std::tolower(c); }
 void TextProcessor::removePunctuation(std::string& text){ for(int i = 0; i < text.size(); i++) if(std::ispunct(text[i])) text.erase(i, 1); }
+
+bool TextProcessor::isStopWord(std::string& text){ return (stopWords.find(text) != stopWords.end()) ? true : false; }
 
 std::vector<std::string> TextProcessor::processar(std::string texto){
     std::vector<std::string> placeholder;
