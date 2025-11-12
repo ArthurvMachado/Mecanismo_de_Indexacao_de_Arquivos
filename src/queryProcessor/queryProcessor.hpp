@@ -1,10 +1,10 @@
 #pragma once
 #include <string>
 
-class queryProcessor{
+class QueryProcessor{
     public:
-        queryProcessor(); // Construtor
-        ~queryProcessor(); // Destrutor
+        QueryProcessor(); // Construtor
+        ~QueryProcessor(); // Destrutor
 
         std::string* buscar(std::string consulta);
 };

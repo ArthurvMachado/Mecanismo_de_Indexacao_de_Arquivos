@@ -1,10 +1,10 @@
 #pragma once
 #include <string>
 
-class serializer{
+class Serializer{
     public:
-        serializer(); // Construtor
-        ~serializer(); // Destrutor
+        Serializer(); // Construtor
+        ~Serializer(); // Destrutor
 
         void salvar(int index, std::string arquivo);
         int carregar(std::string arquivo);

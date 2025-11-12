@@ -1,10 +1,10 @@
 #pragma once
 #include <string>
 
-class indexer{
+class Indexer{
     public:
-        indexer(); // Construtor
-        ~indexer(); // Destrutor
+        Indexer(); // Construtor
+        ~Indexer(); // Destrutor
 
         int construir(std::string diretorio); // retorna Index
 };

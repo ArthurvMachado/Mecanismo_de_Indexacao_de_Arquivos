@@ -1,13 +1,13 @@
 #pragma once
 #include <string>
 
-class index{
+class Index{
     private:
         std::string getNomeArquivoPorId(int id);
     
     public:
-        index(); // Construtor
-        ~index(); // Destrutor
+        Index(); // Construtor
+        ~Index(); // Destrutor
 
         int adicionar(std::string palavra, std::string nome_arquivo);
         int* getArquivosPorPalavra(std::string palavra);

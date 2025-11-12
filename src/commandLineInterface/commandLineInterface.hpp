@@ -1,8 +1,8 @@
 #pragma once
 #include <string>
 
-class commandLineInterface{
+class CommandLineInterface{
     public:
-        commandLineInterface(); // Construtor
-        ~commandLineInterface(); // Destrutor
+        CommandLineInterface(); // Construtor
+        ~CommandLineInterface(); // Destrutor
 };
