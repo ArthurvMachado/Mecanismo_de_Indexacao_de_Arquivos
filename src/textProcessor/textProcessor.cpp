@@ -5,6 +5,7 @@
 #include <unordered_set>
 #include <fstream>
 #include <sstream>
+#include <cctype>
 
 TextProcessor::TextProcessor() { stopWords.clear(); }
 TextProcessor::~TextProcessor() {}
@@ -39,9 +40,16 @@ std::vector<std::string> TextProcessor::breakWords(const std::string& text){
     std::istringstream buffer(text); // Buffer com o texto informado
     
     std::string str;
-    while(buffer >> str) words.push_back(str);
+    while(buffer >> str){
+        lowerCase(str);
+        words.push_back(str);
+    }
 
     return words;
+}
+
+void TextProcessor::lowerCase(std::string& text){
+    for(char c : text) text[c] = std::tolower(text[c]);
 }
 
 std::vector<std::string> TextProcessor::processar(std::string texto){

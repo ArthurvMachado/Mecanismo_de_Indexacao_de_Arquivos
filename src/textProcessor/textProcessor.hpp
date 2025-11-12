@@ -10,6 +10,7 @@ class TextProcessor{
 
         bool loadStopWords(const std::string& datapath); // Carrega as Stop Words
         bool loadText(const std::string& datapath); // Carrega o texto de exemplo
+        void lowerCase(std::string& word); // Converte para minúsculo
 
         std::vector<std::string> breakWords(const std::string& text); // Separa todas as palavras so texto
 
