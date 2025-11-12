@@ -1,5 +1,5 @@
 all:
-	g++ CommandLineInterface.cpp Index.cpp Indexer.cpp QueryProcessor.cpp Serializer.cpp TextProcessor.cpp -o ferreirinha.exe
+	g++ commandLineInterface/commandLineInterface.cpp index/index.cpp indexer/indexer.cpp queryProcessor/queryProcessor.cpp serializer/serializer.cpp textProcessor/textProcessor.cpp -o ferreirinha.exe
 
 clean:
 ifeq ($(OS),Windows_NT)
