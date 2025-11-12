@@ -11,8 +11,8 @@
 TextProcessor::TextProcessor(){ stopWords.clear(); }
 TextProcessor::~TextProcessor() {}
 
-bool TextProcessor::loadStopWords(const std::string& datapath){
-    std::ifstream words(datapath); // Carrega stopWords.txt
+bool TextProcessor::loadStopWords(const std::string& filepath){
+    std::ifstream words(filepath); // Carrega stopWords.txt
 
     if(!words) return false; // Arquivo não encontrado
 
@@ -23,8 +23,8 @@ bool TextProcessor::loadStopWords(const std::string& datapath){
     return true;
 }
 
-bool TextProcessor::loadText(const std::string& datapath){
-    std::ifstream text_a(datapath); // Carrega o texto desejado
+bool TextProcessor::loadText(const std::string& filepath){
+    std::ifstream text_a(filepath); // Carrega o texto desejado
 
     if(!text_a) return false; // Arquivo não encontrado
 
@@ -32,6 +32,8 @@ bool TextProcessor::loadText(const std::string& datapath){
     buffer << text_a.rdbuf(); // Lê todo o arquivo para o buffer
 
     text = buffer.str(); // Copia o buffer para text
+
+    text_a.close();
     return true;
 }
 
@@ -43,25 +45,26 @@ std::vector<std::string> TextProcessor::breakWords(const std::string& text){
     std::string str;
     while(buffer >> str){
         normalize(str);
-        if(!isStopWord) words.push_back(str);
+        if(!this->isStopWord(str)) words.push_back(str);
     }
 
     return words;
 }
 
-void TextProcessor::normalize(std::string& text){ lowerCase(text); removePunctuation(text); }
+void TextProcessor::normalize(std::string& text){ this->lowerCase(text); this->removePunctuation(text); }
 
-void TextProcessor::lowerCase(std::string& text){ for(char c : text) if(std::islower(c)) c = std::tolower(c); }
-void TextProcessor::removePunctuation(std::string& text){ for(int i = 0; i < text.size(); i++) if(std::ispunct(text[i])) text.erase(i, 1); }
+void TextProcessor::lowerCase(std::string& text){ for(char& c : text) if(std::isupper(c)) c = std::tolower(c); }
+void TextProcessor::removePunctuation(std::string& text){ for(int i = 0; i < text.size(); i++) if(std::ispunct(text[i])) text.erase(i--, 1); }
 
-bool TextProcessor::isStopWord(std::string& text){ return (stopWords.find(text) != stopWords.end()) ? true : false; }
+bool TextProcessor::isStopWord(const std::string& text){ return (stopWords.find(text) != stopWords.end()) ? true : false; }
 
 std::vector<std::string> TextProcessor::processar(std::string texto){
     std::vector<std::string> placeholder;
     
-    if(!loadText("../machado/conto/contosFluminenses.txt")) return placeholder;
-    std::vector<std::string> words = breakWords(this->text);
+    if(!this->loadText("../machado/conto/contosFluminenses.txt")) return placeholder;
+    if(!this->loadStopWords("../stopWords.txt")) return placeholder;
 
+    std::vector<std::string> words = this->breakWords(this->text);
     for(std::string el : words) std::cout << el << std::endl;
     return placeholder;
 }
