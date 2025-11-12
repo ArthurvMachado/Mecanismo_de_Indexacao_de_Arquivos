@@ -1,6 +1,11 @@
 #pragma once
-
 #include <string>
 #include <vector>
 
-std::vector<std::string> processar(std::string texto);
+class textProcessor{
+    public:
+        textProcessor(); // Construtor
+        ~textProcessor(); // Destrutor
+        
+        std::vector<std::string> processar(std::string texto);
+};

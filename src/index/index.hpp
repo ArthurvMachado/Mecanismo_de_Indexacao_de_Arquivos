@@ -1,9 +1,15 @@
 #pragma once
-
 #include <string>
 
-int adicionar(std::string palavra, std::string nome_arquivo);
+class index{
+    private:
+        std::string getNomeArquivoPorId(int id);
+    
+    public:
+        index(); // Construtor
+        ~index(); // Destrutor
 
-int* getArquivosPorPalavra(std::string palavra); // retorna conjunto de ids
+        int adicionar(std::string palavra, std::string nome_arquivo);
+        int* getArquivosPorPalavra(std::string palavra);
+};
 
-std::string getNomeArquivoPorId(int id);

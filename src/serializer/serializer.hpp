@@ -1,7 +1,11 @@
 #pragma once
-
 #include <string>
 
-void salvar(int index, std::string arquivo);
+class serializer{
+    public:
+        serializer(); // Construtor
+        ~serializer(); // Destrutor
 
-int carregar(std::string arquivo); // retorna index
+        void salvar(int index, std::string arquivo);
+        int carregar(std::string arquivo);
+};
