@@ -64,11 +64,11 @@ std::vector<std::string> TextProcessor::breakWords(const std::string& text){
 
 void TextProcessor::normalize(std::string& text){ this->lowerCase(text); this->removePunctuation(text); }
 
-void TextProcessor::lowerCase(std::string& text){ for(char& c : text) 
-    if(std::isupper(c)){
+void TextProcessor::lowerCase(std::string& text){ 
+    for(char& c : text){
         if(accents.find(c) != accents.end()) c = accents[c];
-        else c = std::tolower(c);
-    } 
+        if(std::isupper(c)) c = std::tolower(c);
+    }
 }
 void TextProcessor::removePunctuation(std::string& text){ for(int i = 0; i < text.size(); i++) if(std::ispunct(text[i])) text.erase(i--, 1); }
 
