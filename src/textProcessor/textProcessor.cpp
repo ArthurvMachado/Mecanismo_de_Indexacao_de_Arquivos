@@ -1,5 +1,4 @@
 #include "textProcessor.hpp"
-#include "../utils/accents.cpp"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -9,7 +8,18 @@
 #include <cctype>
 #include <algorithm>
 
-TextProcessor::TextProcessor(){ stopWords.clear(); }
+static const std::unordered_map<char, char> ACCENT_MAP = {
+    {'Á', 'á'}, {'Ã', 'ã'}, {'À', 'à'}, {'Â', 'â'},
+    {'É', 'é'}, {'Ê', 'ê'}, {'Í', 'í'}, {'Ó', 'ó'},
+    {'Õ', 'õ'}, {'Ô', 'ô'}, {'Ú', 'ú'}, {'Ü', 'ü'},
+    {'Ç', 'ç'}
+};
+
+TextProcessor::TextProcessor(){
+    stopWords.clear();
+    accents = ACCENT_MAP;
+}
+
 TextProcessor::~TextProcessor() {}
 
 bool TextProcessor::loadStopWords(const std::string& filepath){
@@ -35,14 +45,6 @@ bool TextProcessor::loadText(const std::string& filepath){
     text = buffer.str(); // Copia o buffer para text
     
     text_a.close();
-    return true;
-}
-
-bool loadAccents(const std::string& filepath){
-    std::ifstream acc(filepath); // Carrega o texto desejado
-
-    if(!acc) return false;
-
     return true;
 }
 
