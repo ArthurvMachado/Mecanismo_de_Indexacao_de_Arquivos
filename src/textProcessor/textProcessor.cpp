@@ -1,4 +1,5 @@
 #include "textProcessor.hpp"
+#include "../utils/accents.cpp"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -25,15 +26,23 @@ bool TextProcessor::loadStopWords(const std::string& filepath){
 
 bool TextProcessor::loadText(const std::string& filepath){
     std::ifstream text_a(filepath); // Carrega o texto desejado
-
+    
     if(!text_a) return false; // Arquivo não encontrado
-
+    
     std::stringstream buffer; // Buffer com o texto original
     buffer << text_a.rdbuf(); // Lê todo o arquivo para o buffer
-
+    
     text = buffer.str(); // Copia o buffer para text
-
+    
     text_a.close();
+    return true;
+}
+
+bool loadAccents(const std::string& filepath){
+    std::ifstream acc(filepath); // Carrega o texto desejado
+
+    if(!acc) return false;
+
     return true;
 }
 
@@ -53,7 +62,12 @@ std::vector<std::string> TextProcessor::breakWords(const std::string& text){
 
 void TextProcessor::normalize(std::string& text){ this->lowerCase(text); this->removePunctuation(text); }
 
-void TextProcessor::lowerCase(std::string& text){ for(char& c : text) if(std::isupper(c)) c = std::tolower(c); }
+void TextProcessor::lowerCase(std::string& text){ for(char& c : text) 
+    if(std::isupper(c)){
+        if(accents.find(c) != accents.end()) c = accents[c];
+        else c = std::tolower(c);
+    } 
+}
 void TextProcessor::removePunctuation(std::string& text){ for(int i = 0; i < text.size(); i++) if(std::ispunct(text[i])) text.erase(i--, 1); }
 
 bool TextProcessor::isStopWord(const std::string& text){ return (stopWords.find(text) != stopWords.end()) ? true : false; }

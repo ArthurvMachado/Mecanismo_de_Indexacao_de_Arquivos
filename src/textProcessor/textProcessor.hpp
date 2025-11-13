@@ -7,9 +7,11 @@
 class TextProcessor{
     private:
         std::unordered_set<std::string> stopWords;  // Stop words
+        std::unordered_map<char, char> accents;  // Acentuação
         std::string text; // Texto de exemplo
 
         bool loadStopWords(const std::string& filepath); // Carrega as Stop Words
+        bool loadAccents(const std::string& filepath); // Carrega o mapa de acentos
         bool loadText(const std::string& filepath); // Carrega o texto de exemplo
 
         void normalize(std::string& text); // Normaliza o texto
