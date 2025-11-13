@@ -6,13 +6,17 @@
 #include <fstream> // std::ifstream()
 #include <sstream> // std::stringstream()
 
+// Construtor
 TextProcessor::TextProcessor(){
-    stopWords.clear();
-    accents = ACCENT_MAP;
+    stopWords.clear(); // stopWords inicialize limpa
+    accents = ACCENT_MAP; // set accents recebe ACCENT_MAP
+    textsFilepath = TEXTS_FILEPATH_MAP; // set com endereços dos textos recebe TEXTS_FILEPATH_MAP
 }
 
-TextProcessor::~TextProcessor() {}
+// Destrutor
+TextProcessor::~TextProcessor() {} 
 
+// Carrega as Stop Words
 bool TextProcessor::loadStopWords(const std::string& filepath){
     std::ifstream words(filepath); // Carrega stopWords.txt
 
@@ -20,12 +24,13 @@ bool TextProcessor::loadStopWords(const std::string& filepath){
 
     std::string str;
     // Separa o texto do arquivo a cada quebra de linha ou espaço e o copia para str 
-    while(words >> str) stopWords.insert(str); // Adiciona no set de Stop Words
+    while(words >> str) this->stopWords.insert(str); // Adiciona no set de Stop Words
 
     words.close(); // Fecha o arquivo
     return true;
 }
 
+// Carrega o texto a ser processado
 bool TextProcessor::loadText(const std::string& filepath){
     std::ifstream text_a(filepath); // Carrega o texto desejado
     
@@ -34,16 +39,48 @@ bool TextProcessor::loadText(const std::string& filepath){
     std::stringstream buffer; // Buffer de string orientada a entrada e saída
     buffer << text_a.rdbuf(); // Lê todo o arquivo e insere no buffer 
     
-    text = buffer.str(); // Copia o buffer para text no formato str
+    this->text = buffer.str(); // Copia o buffer para text no formato str
     
     text_a.close(); // Fecha o arquivo
     return true;
 }
 
-std::vector<std::string> TextProcessor::breakWords(const std::string& text){
+// Normaliza o texto
+void TextProcessor::normalize(std::string& txt){
+    this->lowerCase(txt); this->removePunctuation(txt); // Deixa text em minúsculo e retira suas pontuações
+}
+
+// Converte para minúsculo
+void TextProcessor::lowerCase(std::string& txt){ 
+    for(int i = 0; i < txt.size(); i++){
+        if(i + 1 < txt.size()){ // Caracteres acentuadas ocupam dois bytes, por isso deve-se verificar se existem dois caracteres na string
+            std::string c = txt.substr(i, 2); // Substring com os próximos dois bytes
+            if(accents.find(c) != accents.end()){ // Verifica se o caractere é um acento 
+                txt.replace(i, 2, accents[c]); // Substitui o caractere pela sua versão minúscula
+                i++; continue; // Avança um carctere na string e continua o loop
+            } 
+        } 
+        // Se não for um caractere acentuado
+        if(std::isupper(txt[i])) txt[i] = std::tolower(txt[i]); // Verifica se o caractere é uma letra maiúscula e a transforma em minúscuala
+    }
+}
+
+// Remove pontuação
+void TextProcessor::removePunctuation(std::string& txt){
+    for(int i = 0; i < txt.size(); i++) if(std::ispunct(txt[i])) txt.erase(i--, 1); // Se o caractere for uma pontuação é removido
+    // i--, pois deve retornar o índice, pois o indíce da pontuação, após sua remoção, é ocupado por outro caractere
+}
+
+// Detecta Stop Words
+bool TextProcessor::isStopWord(const std::string& txt){
+    return (stopWords.find(txt) != stopWords.end()) ? true : false; // Retorna se text está no set stopWords
+}
+
+// Separa todas as palavras do texto
+std::vector<std::string> TextProcessor::breakWords(const std::string& txt){
     std::vector<std::string> words; // Vetor de palavras separadas
     
-    std::istringstream buffer(text); // Buffer com o conteúdo de text
+    std::istringstream buffer(txt); // Buffer com o conteúdo de text
     
     std::string str;
     while(buffer >> str){ // Separa o texto a cada quebra de linha ou espaço e insere em str
@@ -54,40 +91,15 @@ std::vector<std::string> TextProcessor::breakWords(const std::string& text){
     return words;
 }
 
-void TextProcessor::normalize(std::string& text){
-    this->lowerCase(text); this->removePunctuation(text); // Deixa text em minúsculo e retira suas pontuações
-}
+// Processa o texto
+std::vector<std::string> TextProcessor::processText(std::string textName){
+    lowerCase(textName); // Padroniza text em minúsculo
+    std::string filepath; // String com filepath de text
+    if(textsFilepath.find(textName) != textsFilepath.end()) filepath = textsFilepath[textName]; // filepath recebe o filepath de text
+    else return {}; // Se não existir text em textsFilepath, retorna um vetor nulo
 
-void TextProcessor::lowerCase(std::string& text){ 
-    for(int i = 0; i < text.size(); i++){
-        if(i + 1 < text.size()){ // Caracteres acentuadas ocupam dois bytes, por isso deve-se verificar se existem dois caracteres na string
-            std::string c = text.substr(i, 2); // Substring com os próximos dois bytes
-            if(accents.find(c) != accents.end()){ // Verifica se o caractere é um acento 
-                text.replace(i, 2, accents[c]); // Substitui o caractere pela sua versão minúscula
-                i++; continue; // Avança um carctere na string e continua o loop
-            } 
-        } 
-        // Se não for um caractere acentuado
-        if(std::isupper(text[i])) text[i] = std::tolower(text[i]); // Verifica se o caractere é uma letra maiúscula e a transforma em minúscuala
-    }
-}
+    if(!this->loadText(filepath)) return {}; // Retorna um vetor nulo, caso não conseguir abrir o texto
+    if(!this->loadStopWords("../stopWords.txt")) return {}; // Retorna um vetor nulo, caso não consefuir abrir o texto
 
-void TextProcessor::removePunctuation(std::string& text){
-    for(int i = 0; i < text.size(); i++) if(std::ispunct(text[i])) text.erase(i--, 1); // Se o caractere for uma pontuação é removido
-    // i--, pois deve retornar o índice, pois o indíce da pontuação, após sua remoção, é ocupado por outro caractere
-}
-
-bool TextProcessor::isStopWord(const std::string& text){
-    return (stopWords.find(text) != stopWords.end()) ? true : false; // Retorna se text está no set stopWords
-}
-
-std::vector<std::string> TextProcessor::processar(std::string texto){
-    std::vector<std::string> placeholder;
-    
-    if(!this->loadText("../machado/conto/contosFluminenses.txt")) return placeholder;
-    if(!this->loadStopWords("../stopWords.txt")) return placeholder;
-
-    std::vector<std::string> words = this->breakWords(this->text);
-    for(std::string el : words) std::cout << el << std::endl;
-    return placeholder;
+    return this->breakWords(this->text); // Retorna o vetor de palavras separadas retornado por breakWords
 }
