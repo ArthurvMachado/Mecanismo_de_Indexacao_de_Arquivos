@@ -12,6 +12,7 @@ int main(int argc, char const *argv[]){
     
     TextProcessor processor;
     std::vector<std::string> txt = processor.processText(argv[1]);
+    if(txt.empty()) return 1;
 
     for(const std::string& el : txt) std::cout << el << std::endl;
 

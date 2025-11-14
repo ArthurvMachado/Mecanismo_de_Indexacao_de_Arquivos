@@ -93,13 +93,25 @@ std::vector<std::string> TextProcessor::breakWords(const std::string& txt){
 
 // Processa o texto
 std::vector<std::string> TextProcessor::processText(std::string textName){
+    std::string originalName = textName;
     lowerCase(textName); // Padroniza text em minúsculo
     std::string filepath; // String com filepath de text
     if(textsFilepath.find(textName) != textsFilepath.end()) filepath = textsFilepath[textName]; // filepath recebe o filepath de text
-    else return {}; // Se não existir text em textsFilepath, retorna um vetor nulo
+    else {
+        std::cerr << "Texto " << textName << " nao encontrado";
+        return {}; // Se não existir text em textsFilepath, retorna um vetor nulo
+    }
 
-    if(!this->loadText(filepath)) return {}; // Retorna um vetor nulo, caso não conseguir abrir o texto
-    if(!this->loadStopWords("../stopWords.txt")) return {}; // Retorna um vetor nulo, caso não consefuir abrir o texto
+    if(!this->loadText(filepath)) {
+        std::cerr << "Falha ao carregar texto do arquivo: " << filepath << "\n";
+        return {}; // Retorna um vetor nulo, caso não conseguir abrir o texto
+    }
 
-    return this->breakWords(this->text); // Retorna o vetor de palavras separadas retornado por breakWords
+    if(!this->loadStopWords("../stopWords.txt")) {
+        std::cerr << "Falha ao carregar stopWords\n";
+        return {}; // Retorna um vetor nulo, caso não consefuir abrir o texto
+    }
+
+    auto words = this->breakWords(this->text); // Obtem palavras processadas
+    return words; // Retorna o vetor de palavras separadas retornado por breakWords
 }
