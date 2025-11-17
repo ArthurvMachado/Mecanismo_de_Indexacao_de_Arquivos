@@ -13,19 +13,6 @@ class Index{
         
         int generateId(const std::string& filename); // Cria um ID para o arquivo, retorna, se existente
         
-        /* ===== Busca ===== */
-        const std::unordered_set<int> getTexts(const std::string& word) const; // Retorna os documentos que apresentam word
-        const std::string getFilename(int id) const; // Retorna o arquivo correspendente ao id
-        int getFileId(const std::string& filename) const; // Retorna o id correspondente ao arquivo
-        /* ===== - ===== */
-        
-        /* ===== Auxiliares ===== */
-        bool wordExists(const std::string& word); // Verifica se palavra existe no índice
-        int getTotalTexts(); // Retorna total de documentos indexados
-        int getTotalWords(); // Retorna total de palavras indexadas
-        void clear(); // Limpa o índice
-        /* ===== - =====*/
-        
         public:
         Index(); // Construtor
         ~Index(); // Destrutor
@@ -53,7 +40,23 @@ class Index{
         const std::string getIndexedDir() const; // Retorna o diretório indexado
         void setIndexedDir(const std::string& path); // Define o diretório indexado
         /* ===== - ===== */
+        
+        /* ===== Busca ===== */
+        const std::unordered_set<int> getTexts(const std::string& word) const; // Retorna os documentos que apresentam word
+        const std::string getFilename(int id) const; // Retorna o arquivo correspendente ao id
+        int getFileId(const std::string& filename) const; // Retorna o id correspondente ao arquivo
+        /* ===== - ===== */
+        
+        /* ===== Auxiliares ===== */
+        bool wordExists(const std::string& word); // Verifica se palavra existe no índice
+        int getTotalTexts(); // Retorna total de documentos indexados
+        int getTotalWords(); // Retorna total de palavras indexadas
+        void clear(); // Limpa o índice
+        /* ===== - =====*/
 
-        void test(const std::string& filename); // Teste
-};
 
+
+        // void test(); // Teste
+    };
+    
+    
