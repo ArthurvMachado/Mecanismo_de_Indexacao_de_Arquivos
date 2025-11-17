@@ -14,7 +14,7 @@ TextProcessor::TextProcessor(){
 }
 
 // Destrutor
-TextProcessor::~TextProcessor() {} 
+TextProcessor::~TextProcessor() {}
 
 // Carrega as Stop Words
 bool TextProcessor::loadStopWords(const std::string& filepath){
@@ -53,7 +53,7 @@ void TextProcessor::normalize(std::string& txt){
 // Converte para minúsculo
 void TextProcessor::lowerCase(std::string& txt){ 
     for(int i = 0; i < txt.size(); i++){
-        if(i + 1 < txt.size()){ // Caracteres acentuadas ocupam dois bytes, por isso deve-se verificar se existem dois caracteres na string
+        if(i + 1 < txt.size()){ // Caracteres acentuados ocupam dois bytes, por isso deve-se verificar se existem dois caracteres na string
             std::string c = txt.substr(i, 2); // Substring com os próximos dois bytes
             if(accents.find(c) != accents.end()){ // Verifica se o caractere é um acento 
                 txt.replace(i, 2, accents[c]); // Substitui o caractere pela sua versão minúscula
