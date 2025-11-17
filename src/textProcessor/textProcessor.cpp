@@ -8,7 +8,7 @@
 
 // Construtor
 TextProcessor::TextProcessor(){
-    stopWords.clear(); // stopWords inicialize limpa
+    stopWords.clear(); // stopWords inicializa limpa
     accents = ACCENT_MAP; // set accents recebe ACCENT_MAP
     textsFilepath = TEXTS_FILEPATH_MAP; // set com endereços dos textos recebe TEXTS_FILEPATH_MAP
 }

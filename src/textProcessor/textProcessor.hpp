@@ -38,7 +38,7 @@ class TextProcessor{
     private:
         std::unordered_set<std::string> stopWords;  // Stop words
         std::unordered_map<std::string, std::string> accents;  // Acentuação
-        std::unordered_map<std::string, std::string> textsFilepath;  // Endereço dos texto
+        std::unordered_map<std::string, std::string> textsFilepath;  // Endereço dos textos
         std::string text; // Texto a ser processado
 
         bool loadStopWords(const std::string& filepath); // Carrega as Stop Words
