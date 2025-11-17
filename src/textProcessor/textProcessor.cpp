@@ -10,7 +10,6 @@
 TextProcessor::TextProcessor(){
     stopWords.clear(); // stopWords inicializa limpa
     accents = ACCENT_MAP; // set accents recebe ACCENT_MAP
-    textsFilepath = TEXTS_FILEPATH_MAP; // set com endereços dos textos recebe TEXTS_FILEPATH_MAP
 }
 
 // Destrutor
@@ -27,21 +26,6 @@ bool TextProcessor::loadStopWords(const std::string& filepath){
     while(words >> str) this->stopWords.insert(str); // Adiciona no set de Stop Words
 
     words.close(); // Fecha o arquivo
-    return true;
-}
-
-// Carrega o texto a ser processado
-bool TextProcessor::loadText(const std::string& filepath){
-    std::ifstream text_a(filepath); // Carrega o texto desejado
-    
-    if(!text_a) return false; // Arquivo não encontrado
-    
-    std::stringstream buffer; // Buffer de string orientada a entrada e saída
-    buffer << text_a.rdbuf(); // Lê todo o arquivo e insere no buffer 
-    
-    this->text = buffer.str(); // Copia o buffer para text no formato str
-    
-    text_a.close(); // Fecha o arquivo
     return true;
 }
 
@@ -92,26 +76,12 @@ std::vector<std::string> TextProcessor::breakWords(const std::string& txt){
 }
 
 // Processa o texto
-std::vector<std::string> TextProcessor::processText(std::string textName){
-    std::string originalName = textName;
-    lowerCase(textName); // Padroniza text em minúsculo
-    std::string filepath; // String com filepath de text
-    if(textsFilepath.find(textName) != textsFilepath.end()) filepath = textsFilepath[textName]; // filepath recebe o filepath de text
-    else {
-        std::cerr << "Texto " << textName << " nao encontrado";
-        return {}; // Se não existir text em textsFilepath, retorna um vetor nulo
-    }
-
-    if(!this->loadText(filepath)) {
-        std::cerr << "Falha ao carregar texto do arquivo: " << filepath << "\n";
-        return {}; // Retorna um vetor nulo, caso não conseguir abrir o texto
-    }
-
+std::vector<std::string> TextProcessor::processText(std::string text){
     if(!this->loadStopWords("../stopWords.txt")) {
         std::cerr << "Falha ao carregar stopWords\n";
         return {}; // Retorna um vetor nulo, caso não consefuir abrir o texto
     }
 
-    auto words = this->breakWords(this->text); // Obtem palavras processadas
+    auto words = this->breakWords(text); // Obtem palavras processadas
     return words; // Retorna o vetor de palavras separadas retornado por breakWords
 }
