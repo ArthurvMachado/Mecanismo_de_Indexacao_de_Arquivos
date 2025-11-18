@@ -3,6 +3,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <filesystem>
 #include <unordered_set>
 
 QueryProcessor::QueryProcessor(Index* idx) { this->index = idx; } // Construtor
@@ -26,6 +27,8 @@ std::unordered_set<int> QueryProcessor::intersectMultSets(const std::vector<std:
     for(int i = 2; i < sets.size(); i++) res = intersectSets(res, sets[i]);
     return res;
 }
+
+std::string extractFilename(const std::string& fullPath){ return std::filesystem::path(fullPath).filename().string(); }
 
 std::vector<std::string> QueryProcessor::searchWord(std::string word){
     std::vector<std::string> res;
