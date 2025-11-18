@@ -15,5 +15,5 @@ class QueryProcessor{
         ~QueryProcessor(); // Destrutor
 
         std::vector<std::string> searchWord(std::string word);
-        std::vector<std::string> searchMultWord(std::string word);
+        std::vector<std::string> searchMultWord(std::vector<std::string> words);
 };

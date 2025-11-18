@@ -26,3 +26,23 @@ std::unordered_set<int> QueryProcessor::intersectMultSets(const std::vector<std:
     for(int i = 2; i < sets.size(); i++) res = intersectSets(res, sets[i]);
     return res;
 }
+
+std::vector<std::string> QueryProcessor::searchWord(std::string word){
+    std::vector<std::string> res;
+    auto ids = this->index->getTexts(word);
+    for(int el : ids) res.push_back(this->index->getFilename(el));
+
+    return res;
+}
+
+std::vector<std::string> QueryProcessor::searchMultWord(std::vector<std::string> words){
+    std::vector<std::string> res;
+    std::vector<std::unordered_set<int>> ids;
+    
+    for(std::string word : words) ids.push_back(this->index->getTexts(word));
+    std::unordered_set<int> intersecID = intersectMultSets(ids);
+
+    for(int el : intersecID) res.push_back(this->index->getFilename(el));
+
+    return res;
+}
