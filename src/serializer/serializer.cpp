@@ -13,7 +13,7 @@ void Serializer::salvar(Index index, std::string arquivo){
     std::ofstream fileToSave(arquivo.append(".dat"));
     
     if (fileToSave.is_open()) {
-        std::string indexedDir = index.getIndexedDir();
+        std::string dirPath = index.getDirPath();
         int nextId = index.getNextId();
         auto invertedIndex = index.getInvertedIndex();
         // auto nameToId = index.getNameToId();
@@ -22,7 +22,7 @@ void Serializer::salvar(Index index, std::string arquivo){
         std::string lines = "";
         std::unordered_set<std::string> names;
 
-        lines.append(indexedDir);
+        lines.append(dirPath);
         lines.append(",");
         lines.append(std::to_string(nextId));
         lines.append("\n");
@@ -63,7 +63,7 @@ Index Serializer::carregar(std::string arquivo){
     std::string line;
 
     int nextId;
-    std::string indexedDir;
+    std::string dirPath;
     std::unordered_map<std::string, std::unordered_set<int>> invertedIndex;
     std::unordered_map<std::string, int> nameToId;
     std::unordered_map<int, std::string> idToName;
@@ -79,7 +79,7 @@ Index Serializer::carregar(std::string arquivo){
             if(line == "invertedIndex") {invertedIndexFlag = true; continue;}
 
             if (!idToNameFlag && !invertedIndexFlag) {
-                indexedDir = line.substr(0, line.find(',')); // lê IndexedDir
+                dirPath = line.substr(0, line.find(',')); // lê DirPath
                 nextId = std::stoi(line.substr(line.find(',')+1)); // lê nextId
                 idToNameFlag = true;
 
@@ -103,7 +103,7 @@ Index Serializer::carregar(std::string arquivo){
             }
         }
         
-        index.setIndexedDir(indexedDir);
+        index.setDirPath(dirPath);
         index.setIdToName(idToName);
         index.setNameToId(nameToId);
         index.setInvertedIndex(invertedIndex);
