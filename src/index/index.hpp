@@ -12,7 +12,8 @@ class Index{
         std::string dirPath; // Diretório Indexado
         
         int generateId(const std::string& filename); // Cria um ID para o arquivo, retorna, se existente
-        
+        void clear(); // Limpa o índice
+
         public:
         Index(); // Construtor
         ~Index(); // Destrutor
@@ -51,7 +52,7 @@ class Index{
         bool wordExists(const std::string& word); // Verifica se palavra existe no índice
         int getTotalTexts(); // Retorna total de documentos indexados
         int getTotalWords(); // Retorna total de palavras indexadas
-        void clear(); // Limpa o índice
+        void print();
         /* ===== - =====*/
 
 

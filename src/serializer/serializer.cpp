@@ -9,8 +9,8 @@ Serializer::Serializer(){}
 
 Serializer::~Serializer(){}
 
-void Serializer::salvar(Index index, std::string arquivo){
-    std::ofstream fileToSave(arquivo.append(".dat"));
+void Serializer::save(Index index, std::string file){
+    std::ofstream fileToSave(file.append(".dat"));
     
     if (fileToSave.is_open()) {
         std::string dirPath = index.getDirPath();
@@ -58,8 +58,8 @@ void Serializer::salvar(Index index, std::string arquivo){
     }
 }
 
-Index Serializer::carregar(std::string arquivo){
-    std::ifstream fileToRead(arquivo.append(".dat"));
+Index Serializer::load(std::string file){
+    std::ifstream fileToRead(file.append(".dat"));
     std::string line;
 
     int nextId;
