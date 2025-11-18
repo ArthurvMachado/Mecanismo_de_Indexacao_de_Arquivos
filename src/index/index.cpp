@@ -102,9 +102,9 @@ void Index::setNextId(int id){ this->nextId = id; }
 // invertedID
 
 // Retorna o índice invertido
-const std::string Index::getIndexedDir() const{ return this->indexedDir; }
+const std::string Index::getDirPath() const{ return this->dirPath; }
 // Define o índice invertido
-void Index::setIndexedDir(const std::string& path){ this->indexedDir = path; }
+void Index::setDirPath(const std::string& path){ this->dirPath = path; }
 /* ===== - ===== */
 
 

@@ -9,7 +9,7 @@ class Index{
         std::unordered_map<std::string, int> nameToId; // (NomeArquivo → ID)
         std::unordered_map<int, std::string> idToName; // (ID → NomeArquivo)
         int nextId; // Contador de IDs
-        std::string indexedDir; // Diretório Indexado
+        std::string dirPath; // Diretório Indexado
         
         int generateId(const std::string& filename); // Cria um ID para o arquivo, retorna, se existente
         
@@ -37,8 +37,8 @@ class Index{
         void setNextId(int id); // Define o próximo ID
 
         // indexedDir
-        const std::string getIndexedDir() const; // Retorna o diretório indexado
-        void setIndexedDir(const std::string& path); // Define o diretório indexado
+        const std::string getDirPath() const; // Retorna o diretório indexado
+        void setDirPath(const std::string& path); // Define o diretório indexado
         /* ===== - ===== */
         
         /* ===== Busca ===== */
