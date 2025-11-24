@@ -76,7 +76,6 @@ A interface permite comandos para indexar arquivos e realizar buscas.
 ### Requisitos
 
 - Compilador C++ compatível com C++11 ou superior.
-- Sistema operacional Linux recomendado.
 
 ### Referências
 
