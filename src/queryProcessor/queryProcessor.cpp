@@ -38,7 +38,7 @@ std::vector<std::string> QueryProcessor::searchWord(std::string word){
     return res; // Retorna o vetor de nomes dos arquivos
 }
 
-// Procura múltiplas palavra
+// Procura múltiplas palavras
 std::vector<std::string> QueryProcessor::searchMultWord(std::vector<std::string> words){
     std::vector<std::string> res; // Vetor de nomes de arquivos onde as palavras então presentes
     std::vector<std::unordered_set<int>> ids; // Vetor de sets de IDs correspondentes as palavras

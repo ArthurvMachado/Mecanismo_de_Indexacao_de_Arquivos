@@ -18,5 +18,5 @@
             ~Indexer(); // Destrutor
 
             bool buildIndex(const std::string& dirPath); // Constrói o índice
-            int getTotalFiles(); // Retorna o total de arquivos indexado
+            int getTotalFiles(); // Retorna o total de arquivos indexados
         };
