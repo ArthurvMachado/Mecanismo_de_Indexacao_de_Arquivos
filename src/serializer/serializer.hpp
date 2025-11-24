@@ -7,6 +7,6 @@ class Serializer{
         Serializer(); // Construtor
         ~Serializer(); // Destrutor
 
-        void save(Index index, std::string arquivo);
-        Index load(std::string arquivo);
+        void save(Index index, std::string file); // persiste o Index parametrizado em um arquivo {file}.dat
+        Index load(std::string file); // carrega o Index parametrizado de um arquivo {file}.dat
 };
