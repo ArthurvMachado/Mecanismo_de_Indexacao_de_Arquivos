@@ -51,8 +51,16 @@ void TextProcessor::lowerCase(std::string& txt){
 
 // Remove pontuação
 void TextProcessor::removePunctuation(std::string& txt){
-    for(int i = 0; i < txt.size(); i++) if(std::ispunct(txt[i]) || txt[i] == '“') txt.erase(i--, 1); // Se o caractere for uma pontuação é removido
-    // i--, pois deve retornar o índice, pois o indíce da pontuação, após sua remoção, é ocupado por outro caractere
+    for(int i = 0; i < txt.size(); i++){
+        if(i + 2 < txt.size()){ // Os caracteres —, “ e ” ocupam três bytes, por isso deve-se verificar se existem três caracteres na string
+            std::string c = txt.substr(i, 3); // Substring com os próximos dois bytes
+            if((c == "“" || c == "”" || c == "—")){ // Verifica se o caractere tem que ser removido 
+                txt.erase(i--, 3); continue; // Remove o caractere e retorna um indíce
+            } 
+        } 
+        // Se não for um dos caracteres acima
+        if(std::ispunct(txt[i]) && txt[i] != '-') txt.erase(i--, 1); // Remove a pontuação, se não for um hífen e retorna o índice
+    }
 }
 
 // Detecta Stop Words

@@ -11,22 +11,22 @@ CommandLineInterface::~CommandLineInterface() {}
 
 // Extrai apenas o nome do arquivo
 std::string CommandLineInterface::extractFilename(const std::string& fullPath) {
-    for(int i = fullPath.size() - 1; i >= 0; i--)
-        if(fullPath[i] == '\\' || fullPath[i] == '/') return fullPath.substr(i + 1);
+    for(int i = fullPath.size() - 1; i >= 0; i--) // Varre o caminho do arquivo ao contrário
+        if(fullPath[i] == '\\' || fullPath[i] == '/') return fullPath.substr(i + 1); // Ao encontrar / ou \ retorna a substring correspondente ao nome do aruqivo
     
-    return fullPath;
+    return fullPath; // Retorna o nome completo caso não ache / ou \ na string
 }
 
 // Exibe os resultados da busca
 void CommandLineInterface::displayResults(const std::vector<std::string>& results, const std::string& query) {
     std::cout << "\n========================================\n";
-    std::cout << "Resultados para: \"" << query << "\"\n";
+    std::cout << "Resultados para: \"" << query << "\"\n"; // query = palavra(s) na busca
     std::cout << "========================================\n";
     
-    if(results.empty()) std::cout << "Nenhum documento encontrado.\n";
+    if(results.empty()) std::cout << "Nenhum documento encontrado.\n"; // Caso não existir nos textos
     else {
-        std::cout << "Encontrado(s) " << results.size() << " documento(s):\n\n";
-        for(const std::string& filepath : results) std::cout << " - " << extractFilename(filepath) << "\n";
+        std::cout << "Encontrado(s) " << results.size() << " documento(s):\n\n"; // Número de documentos onde a busca está presente
+        for(const std::string& filepath : results) std::cout << " - " << extractFilename(filepath) << "\n"; // Arquivos onde a busca está presente
     }
     std::cout << "========================================\n\n";
 }
