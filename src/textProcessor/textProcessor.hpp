@@ -22,7 +22,7 @@ class TextProcessor{
         
         std::vector<std::string> breakWords(const std::string& txt); // Separa todas as palavras do texto
         
-        public:
+    public:
         TextProcessor(); // Construtor
         ~TextProcessor(); // Destrutor
         
