@@ -1,4 +1,4 @@
-# Ferreirinha's Index
+# FERREIRINHA'S INDEX
 
 ## Trabalho Prático de Algoritmos e Estrutura de Dados II - BCC4001
 
