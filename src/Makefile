@@ -1,8 +1,8 @@
 all:
 ifeq ($(OS),Windows_NT)
-	g++ commandLineInterface/commandLineInterface.cpp index/index.cpp indexer/indexer.cpp queryProcessor/queryProcessor.cpp serializer/serializer.cpp textProcessor/textProcessor.cpp -o ferreirinha.exe 
+	g++ commandLineInterface/commandLineInterface.cpp index/index.cpp indexer/indexer.cpp queryProcessor/queryProcessor.cpp serializer/serializer.cpp textProcessor/textProcessor.cpp main.cpp -o ferreirinha.exe 
 else
-	g++ commandLineInterface/commandLineInterface.cpp index/index.cpp indexer/indexer.cpp queryProcessor/queryProcessor.cpp serializer/serializer.cpp textProcessor/textProcessor.cpp -o ferreirinha
+	g++ commandLineInterface/commandLineInterface.cpp index/index.cpp indexer/indexer.cpp queryProcessor/queryProcessor.cpp serializer/serializer.cpp textProcessor/textProcessor.cpp main.cpp -o ferreirinha
 endif
 	
 clean:

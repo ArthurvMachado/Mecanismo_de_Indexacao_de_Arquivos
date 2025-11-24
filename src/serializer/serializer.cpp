@@ -10,59 +10,45 @@ Serializer::Serializer(){}
 Serializer::~Serializer(){}
 
 void Serializer::save(Index index, std::string file){
-    std::ofstream fileToSave(file.append(".dat"));
+    std::ofstream fileToSave(file + ".dat");
     
-    if (fileToSave.is_open()) {
-        std::string dirPath = index.getDirPath();
-        int nextId = index.getNextId();
-        auto invertedIndex = index.getInvertedIndex();
-        // auto nameToId = index.getNameToId();
-        auto idToName = index.getIdToName();
-
-        std::string lines = "";
-        std::unordered_set<std::string> names;
-
-        lines.append(dirPath);
-        lines.append(",");
-        lines.append(std::to_string(nextId));
-        lines.append("\n");
-
-        // persiste idToName & possibilita gerar no carregamento nameToId
-        lines.append("idToName\n");
-        for (int i = 0; i < nextId; i++){
-            std::string row = "";
-
-            row.append(std::to_string(i));
-            row.append(",");
-            row.append(idToName[i]);
-
-            names.insert(idToName[i]);
-
-            lines.append(row);
-            lines.append("\n");
-        }
-
-        // persiste invertedIndex
-        lines.append("invertedIndex\n");
-        for(auto it : invertedIndex){
-            lines.append(it.first);
-            lines.append(",");
-            for (auto id : it.second){
-                lines.append(std::to_string(id));
-                lines.append(",");
-            }
-        }
-
-        fileToSave << lines;
-        fileToSave.close();
+    if (!fileToSave.is_open()) {
+        std::cerr << "Erro ao abrir arquivo para salvar: " << file << ".dat\n";
+        return;
     }
+    
+    std::string dirPath = index.getDirPath();
+    int nextId = index.getNextId();
+    auto invertedIndex = index.getInvertedIndex();
+    auto idToName = index.getIdToName();
+
+    // Linha 1: dirPath,nextId
+    fileToSave << dirPath << "," << nextId << "\n";
+
+    // Seção idToName
+    fileToSave << "idToName\n";
+    for (int i = 0; i < nextId; i++){
+        fileToSave << i << "," << idToName.at(i) << "\n";
+    }
+
+    // Seção invertedIndex
+    fileToSave << "invertedIndex\n";
+    for(const auto& it : invertedIndex){
+        fileToSave << it.first << ",";
+        for (const auto& id : it.second){
+            fileToSave << id << ",";
+        }
+        fileToSave << "\n"; // IMPORTANTE: quebra de linha!
+    }
+
+    fileToSave.close();
 }
 
 Index Serializer::load(std::string file){
-    std::ifstream fileToRead(file.append(".dat"));
+    std::ifstream fileToRead(file + ".dat");
     std::string line;
 
-    int nextId;
+    int nextId = 0;
     std::string dirPath;
     std::unordered_map<std::string, std::unordered_set<int>> invertedIndex;
     std::unordered_map<std::string, int> nameToId;
@@ -72,44 +58,77 @@ Index Serializer::load(std::string file){
     bool idToNameFlag = false;
     bool invertedIndexFlag = false;
 
-    if (fileToRead.is_open()) {
-        while(getline(fileToRead, line)){
+    if (!fileToRead.is_open()) {
+        std::cerr << "Erro ao abrir arquivo para carregar: " << file << ".dat\n";
+        return index;
+    }
 
-            if(line == "idToName") {idToNameFlag = true; continue;}
-            if(line == "invertedIndex") {invertedIndexFlag = true; continue;}
+    while(getline(fileToRead, line)){
+        // Ignorar linhas vazias
+        if(line.empty()) continue;
 
-            if (!idToNameFlag && !invertedIndexFlag) {
-                dirPath = line.substr(0, line.find(',')); // lê DirPath
-                nextId = std::stoi(line.substr(line.find(',')+1)); // lê nextId
-                idToNameFlag = true;
+        if(line == "idToName") {
+            idToNameFlag = true;
+            invertedIndexFlag = false;
+            continue;
+        }
+        
+        if(line == "invertedIndex") {
+            invertedIndexFlag = true;
+            idToNameFlag = false;
+            continue;
+        }
 
-            } else if (idToNameFlag && !invertedIndexFlag){    
-                // lê nameToId e idToName
-                int id = std::stoi(line.substr(0, line.find(',')));
-                std::string name = line.substr(line.find(',')+1);
+        if (!idToNameFlag && !invertedIndexFlag) {
+            // Primeira linha: dirPath,nextId
+            size_t pos = line.find(',');
+            if(pos != std::string::npos) {
+                dirPath = line.substr(0, pos);
+                nextId = std::stoi(line.substr(pos + 1));
+            }
+
+        } else if (idToNameFlag && !invertedIndexFlag){    
+            // Lê nameToId e idToName
+            size_t pos = line.find(',');
+            if(pos != std::string::npos) {
+                int id = std::stoi(line.substr(0, pos));
+                std::string name = line.substr(pos + 1);
 
                 nameToId[name] = id;
                 idToName[id] = name;
+            }
 
-            } else if (idToNameFlag && invertedIndexFlag){
-                // lê invertedIndex
-                std::string s = line.substr(0, line.find(',')); // cada linha é  uma relação (Palavra → IDs)
-                std::string ids = line.substr(line.find(',')+1); // mantém apenas os ID's
-                invertedIndex.insert({s, {}}); // separa e salva o primeiro item como palavra
-                while (ids != ""){
-                    invertedIndex[s].insert(std::stoi(ids.substr(0, ids.find(',')))); // salva o número até o primeira vírgula
-                    ids = ids.substr(ids.find(',')+1); // remove o número salvo
+        } else if (invertedIndexFlag){
+            // Lê invertedIndex
+            size_t pos = line.find(',');
+            if(pos == std::string::npos) continue;
+            
+            std::string word = line.substr(0, pos);
+            std::string ids = line.substr(pos + 1);
+            
+            invertedIndex[word] = std::unordered_set<int>();
+            
+            // Parse dos IDs
+            while (!ids.empty()){
+                size_t commaPos = ids.find(',');
+                if(commaPos == std::string::npos) break;
+                
+                std::string idStr = ids.substr(0, commaPos);
+                if(!idStr.empty()) {
+                    invertedIndex[word].insert(std::stoi(idStr));
                 }
+                ids = ids.substr(commaPos + 1);
             }
         }
-        
-        index.setDirPath(dirPath);
-        index.setIdToName(idToName);
-        index.setNameToId(nameToId);
-        index.setInvertedIndex(invertedIndex);
-        index.setNextId(nextId);
-        
-        fileToRead.close();
     }
+    
+    index.setDirPath(dirPath);
+    index.setIdToName(idToName);
+    index.setNameToId(nameToId);
+    index.setInvertedIndex(invertedIndex);
+    index.setNextId(nextId);
+    
+    fileToRead.close();
+    
     return index;
 }

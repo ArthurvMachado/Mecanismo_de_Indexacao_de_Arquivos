@@ -19,16 +19,15 @@ class TextProcessor{
         bool loadStopWords(const std::string& filepath); // Carrega as Stop Words
 
         void normalize(std::string& txt); // Normaliza o texto
-        void lowerCase(std::string& txt); // Converte para minúsculo
-        void removePunctuation(std::string& txt); // Remove pontuação
-
-        bool isStopWord(const std::string& word); // Detecta Stop Words
-
+        
         std::vector<std::string> breakWords(const std::string& txt); // Separa todas as palavras do texto
-
-    public:
+        
+        public:
         TextProcessor(); // Construtor
         ~TextProcessor(); // Destrutor
         
         std::vector<std::string> processText(std::string text); // Função pública que processa o texto
+        void lowerCase(std::string& txt); // Converte para minúsculo
+        void removePunctuation(std::string& txt); // Remove pontuação
+        bool isStopWord(const std::string& word); // Detecta Stop Words
 };

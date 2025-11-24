@@ -10,6 +10,7 @@ class QueryProcessor{
     
         std::unordered_set<int> intersectSets(const std::unordered_set<int>& s1, const std::unordered_set<int>& s2);
         std::unordered_set<int> intersectMultSets(const std::vector<std::unordered_set<int>>& sets);
+        
     public:
         QueryProcessor(Index* idx); // Construtor
         ~QueryProcessor(); // Destrutor

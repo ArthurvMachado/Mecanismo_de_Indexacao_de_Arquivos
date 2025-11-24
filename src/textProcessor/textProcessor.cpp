@@ -51,7 +51,7 @@ void TextProcessor::lowerCase(std::string& txt){
 
 // Remove pontuação
 void TextProcessor::removePunctuation(std::string& txt){
-    for(int i = 0; i < txt.size(); i++) if(std::ispunct(txt[i])) txt.erase(i--, 1); // Se o caractere for uma pontuação é removido
+    for(int i = 0; i < txt.size(); i++) if(std::ispunct(txt[i]) || txt[i] == '“') txt.erase(i--, 1); // Se o caractere for uma pontuação é removido
     // i--, pois deve retornar o índice, pois o indíce da pontuação, após sua remoção, é ocupado por outro caractere
 }
 
